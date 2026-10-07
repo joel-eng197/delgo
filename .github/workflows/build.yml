@@ -1,5 +1,6 @@
 name: Build DELGO APK
-on: [push]
+on:
+  push:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -8,19 +9,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-      - name: Setup Expo
-        run: npm install -g eas-cli expo-cli
-      - name: Install deps
-        run: npm install
-      - name: Prebuild
+      - name: Install
+        run: |
+          npm install -g eas-cli
+          npm install
+      - name: Prebuild Android
         run: npx expo prebuild --platform android --non-interactive
       - name: Build APK
         run: |
           cd android
           chmod +x gradlew
-         ./gradlew assembleRelease
+          ./gradlew assembleRelease
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: DELGO-APK-58-departements
-          path: android/app/build/outputs/apk/release/*.apk
+          path: android/app/build/outputs/apk/release/app-release.apk
